@@ -115,6 +115,18 @@ static int check_user_access(request_rec *r)
                 }
             }
         }
+        if (!strcasecmp(w, "except")) {
+            /* And note that there are applicable requirements
+             * which we consider ourselves the owner of.
+             */
+            required_user = 1;
+            while (t[0]) {
+                w = ap_getword_conf(r->pool, &t);
+                if (strcmp(user, w)) {
+                    return OK;
+                }
+            }
+        }
     }
 
     if (!required_user) {
